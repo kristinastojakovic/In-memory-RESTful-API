@@ -2,7 +2,7 @@
   "name": "in-memory-restful-api",
   "version": "1.0.0",
   "description": "In-memory RESTful API",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
