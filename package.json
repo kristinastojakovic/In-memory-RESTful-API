@@ -1,0 +1,19 @@
+{
+  "name": "in-memory-restful-api",
+  "version": "1.0.0",
+  "description": "In-memory RESTful API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kristinastojakovic/In-memory-RESTful-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kristinastojakovic/In-memory-RESTful-API/issues"
+  },
+  "homepage": "https://github.com/kristinastojakovic/In-memory-RESTful-API#readme"
+}
