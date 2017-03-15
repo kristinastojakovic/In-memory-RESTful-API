@@ -25,6 +25,11 @@ app.get('/events/:number', function (req, res) {
   res.send(array[number+1]);
 })
 
+app.post('/events', function (req, res) {
+  array.push(event);
+  res.send(array);
+})
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
