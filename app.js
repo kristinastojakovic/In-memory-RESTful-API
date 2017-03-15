@@ -30,6 +30,13 @@ app.post('/events', (req, res) => {
   res.send(array);
 })
 
+app.put('/events/:id', (req, res) => {
+  let id = parseInt(req.params.id);
+
+  array[id+1].title = "this has changed";
+  res.send(array);
+})
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
