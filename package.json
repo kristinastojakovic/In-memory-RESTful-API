@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/kristinastojakovic/In-memory-RESTful-API/issues"
   },
-  "homepage": "https://github.com/kristinastojakovic/In-memory-RESTful-API#readme"
+  "homepage": "https://github.com/kristinastojakovic/In-memory-RESTful-API#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
 }
