@@ -5,18 +5,24 @@ let event = {"id": 1, "title": "Marathon_Boston", "description": "This was a run
       "date": "12.06.2017"};
 
 let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a run",
-      "date": "12.06.2017"}, 
+      "date": "12.06.2017"},
 	  {"id": 2, "title": "Music_Festival", "description": "This was fun",
-      "date": "01.04.2017"}, 
+      "date": "01.04.2017"},
 	  {"id": 3, "title": "Film_Festival", "description": "This was educational",
       "date": "30.08.2017"}];
-	  
+
 app.get('/event', function (req, res) {
   res.send(event);
 })
 
-app.get('/all', function (req, res) {
+app.get('/events', function (req, res) {
 	res.send(array);
+})
+
+app.get('/events/:number', function (req, res) {
+  let number = parseInt(req.params.number);
+
+  res.send(array[number+1]);
 })
 
 app.listen(3000, function () {
