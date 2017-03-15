@@ -11,21 +11,21 @@ let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a ru
 	  {"id": 3, "title": "Film_Festival", "description": "This was educational",
       "date": "30.08.2017"}];
 
-app.get('/event', function (req, res) {
+app.get('/event', (req, res) => {
   res.send(event);
 })
 
-app.get('/events', function (req, res) {
+app.get('/events', (req, res) => {
 	res.send(array);
 })
 
-app.get('/events/:number', function (req, res) {
+app.get('/events/:number', (req, res) => {
   let number = parseInt(req.params.number);
 
   res.send(array[number+1]);
 })
 
-app.post('/events', function (req, res) {
+app.post('/events', (req, res) => {
   array.push(event);
   res.send(array);
 })
