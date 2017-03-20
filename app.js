@@ -46,7 +46,6 @@ app.post('/events', (req, res) => {
   res.send(array);
 })
 
-
 app.put('/events/:id', (req, res) => {
   let id = parseInt(req.params.id);
 
@@ -60,6 +59,22 @@ app.put('/events/:id', (req, res) => {
   
   event.title = "This has changed.";
   res.send(event);
+})
+
+app.delete('/events/:id', (req, res) => {
+  let id = parseInt(req.params.id);
+
+  //find the event by id
+  let event = findEventById(id);
+  
+  if (!event) {
+	res.statusCode = 404;
+	return res.send('Could not find a event by this id');
+  }
+  
+  var idx = array.indexOf(event);
+  array.splice(idx, 1);
+  res.send(array);
 })
 
 app.listen(3000, function () {
