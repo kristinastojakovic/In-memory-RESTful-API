@@ -34,6 +34,7 @@ app.get('/events/:id', (req, res) => {
   //find the event by id
   let event = findEventById(id);
 
+  //checking if event is empty
   if(!event) {
     res.statusCode = 404;
     return res.send('Could not find a event by this id');
@@ -51,12 +52,13 @@ app.put('/events/:id', (req, res) => {
 
   //find the event by id
   let event = findEventById(id);
-  
+
+  //checking if event is empty
   if (!event) {
 	res.statusCode = 404;
 	return res.send('Could not find a event by this id');
   }
-  
+
   event.title = "This has changed.";
   res.send(event);
 })
@@ -66,14 +68,15 @@ app.delete('/events/:id', (req, res) => {
 
   //find the event by id
   let event = findEventById(id);
-  
+
+  //checking if event is empty
   if (!event) {
 	res.statusCode = 404;
 	return res.send('Could not find a event by this id');
   }
-  
-  var idx = array.indexOf(event);
-  array.splice(idx, 1);
+
+  let index = array.indexOf(event);
+  array.splice(index, 1);
   res.send(array);
 })
 
