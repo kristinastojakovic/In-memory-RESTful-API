@@ -50,8 +50,16 @@ app.post('/events', (req, res) => {
 app.put('/events/:id', (req, res) => {
   let id = parseInt(req.params.id);
 
-  array[id+1].title = "this has changed";
-  res.send(array);
+  //find the event by id
+  let event = findEventById(id);
+  
+  if (!event) {
+	res.statusCode = 404;
+	return res.send('Could not find a event by this id');
+  }
+  
+  event.title = "This has changed.";
+  res.send(event);
 })
 
 app.listen(3000, function () {
