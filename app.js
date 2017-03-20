@@ -19,16 +19,23 @@ app.get('/events', (req, res) => {
 	res.send(array);
 })
 
-app.get('/events/:number', (req, res) => {
-  let number = parseInt(req.params.number);
+app.get('/events/:id', (req, res) => {
+  //get the id from the route
+  let id = parseInt(req.params.id);
 
-  res.send(array[number+1]);
+  //find the event with the right id
+  for(let i = 1; i < array.length; i++) {
+    if(array[i].id === id){
+      res.send(array[i]);
+    }
+  }
 })
 
 app.post('/events', (req, res) => {
   array.push(event);
   res.send(array);
 })
+
 
 app.put('/events/:id', (req, res) => {
   let id = parseInt(req.params.id);
