@@ -19,16 +19,26 @@ app.get('/events', (req, res) => {
 	res.send(array);
 })
 
+function findEventById(id) {
+  for(let i = 0; i < array.length; i++) {
+    if(array[i].id === id){
+      return array[i];
+    }
+  }
+}
+
 app.get('/events/:id', (req, res) => {
   //get the id from the route
   let id = parseInt(req.params.id);
 
-  //find the event with the right id
-  for(let i = 1; i < array.length; i++) {
-    if(array[i].id === id){
-      res.send(array[i]);
-    }
+  //find the event by id
+  let event = findEventById(id);
+
+  if(!event) {
+    res.statusCode = 404;
+    return res.send('Could not find a event by this id');
   }
+  res.send(event);
 })
 
 app.post('/events', (req, res) => {
