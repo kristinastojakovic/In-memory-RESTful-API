@@ -15,6 +15,8 @@ app.get('/event', (req, res) => {
   res.send(event);
 })
 
+
+
 app.get('/events', (req, res) => {
 	res.send(array);
 })
