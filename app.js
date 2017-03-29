@@ -1,5 +1,10 @@
 let express = require('express');
 let app = express();
+var multer = require('multer'); // v1.0.5
+var upload = multer(); // for parsing multipart/form-data
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 let event = {"id": 1, "title": "Marathon_Boston", "description": "This was a run",
       "date": "12.06.2017"};
@@ -49,20 +54,24 @@ app.post('/events', (req, res) => {
   res.send(array);
 })
 
-app.put('/events/:id', (req, res) => {
-  let id = parseInt(req.params.id);
+app.put('/events/:id', upload.array(), (req, res) => {
+ let id = parseInt(req.params.id);
 
-  //find the event by id
-  let event = findEventById(id);
+ //find the event by id
+ let event = findEventById(id);
 
-  //checking if event is empty
-  if (!event) {
-	res.statusCode = 404;
-	return res.send('Could not find a event by this id');
-  }
+ //checking if event is empty
+ if (!event) {
+    res.statusCode = 404;
+    return res.send('Could not find a event by this id');
+ }
+ console.log(req.body);
+ //console.log(req.body.title);
 
-  event.title = "This has changed.";
-  res.send(event);
+ event.title = req.body.title;
+ event.description = req.body.description;
+ event.date = req.body.date;
+ res.send(event);
 })
 
 app.delete('/events/:id', (req, res) => {
