@@ -1,7 +1,9 @@
 let express = require('express');
 let app = express();
+const bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
