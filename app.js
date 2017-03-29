@@ -1,9 +1,6 @@
 let express = require('express');
 let app = express();
 const bodyParser = require('body-parser');
-var multer = require('multer'); // v1.0.5
-var upload = multer(); // for parsing multipart/form-data
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -52,11 +49,11 @@ app.get('/events/:id', (req, res) => {
 })
 
 app.post('/events', (req, res) => {
-  array.push(event);
+  array.push(req.body);
   res.send(array);
 })
 
-app.put('/events/:id', upload.array(), (req, res) => {
+app.put('/events/:id', (req, res) => {
  let id = parseInt(req.params.id);
 
  //find the event by id
