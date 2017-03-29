@@ -49,7 +49,19 @@ app.get('/events/:id', (req, res) => {
 })
 
 app.post('/events', (req, res) => {
-  array.push(req.body);
+  if (!req.body.title || !req.body.description || !req.body.date) {
+    res.statusCode = 404;
+    return res.send('You have to insert title, description and date');
+  }
+
+  //makes new id for the new event
+  let newId = array.length + 1;
+  let newEvent = {"id": newId,
+              "title": req.body.title,
+              "description": req.body.description,
+              "date": req.body.date};
+
+  array.push(newEvent);
   res.send(array);
 })
 
@@ -64,12 +76,25 @@ app.put('/events/:id', (req, res) => {
     res.statusCode = 404;
     return res.send('Could not find a event by this id');
  }
- console.log(req.body);
- //console.log(req.body.title);
 
+ if (!req.body.title) {
+   res.statusCode = 404;
+   return res.send('You have to insert a name');
+ }
  event.title = req.body.title;
+
+ if (!req.body.description) {
+   res.statusCode = 404;
+   return res.send('You have to insert a description');
+ }
  event.description = req.body.description;
+
+ if (!req.body.title) {
+   res.statusCode = 404;
+   return res.send('You have to insert a date');
+ }
  event.date = req.body.date;
+
  res.send(event);
 })
 
