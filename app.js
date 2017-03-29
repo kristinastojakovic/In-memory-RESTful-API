@@ -1,12 +1,10 @@
-let express = require('express');
-let app = express();
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let event = {"id": 1, "title": "Marathon_Boston", "description": "This was a run",
-      "date": "12.06.2017"};
 
 let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a run",
       "date": "12.06.2017"},
@@ -16,14 +14,12 @@ let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a ru
       "date": "30.08.2017"}];
 
 app.get('/event', (req, res) => {
-  res.send(event);
-})
-
-
+  res.send(array[0]);
+});
 
 app.get('/events', (req, res) => {
 	res.send(array);
-})
+});
 
 function findEventById(id) {
   for(let i = 0; i < array.length; i++) {
@@ -35,7 +31,7 @@ function findEventById(id) {
 
 app.get('/events/:id', (req, res) => {
   //get the id from the route
-  let id = parseInt(req.params.id);
+  const id = parseInt(req.params.id);
 
   //find the event by id
   let event = findEventById(id);
@@ -55,8 +51,8 @@ app.post('/events', (req, res) => {
   }
 
   //makes new id for the new event
-  let newId = array.length + 1;
-  let newEvent = {"id": newId,
+  const newId = array[array.length-1].id + 1;
+  const newEvent = {"id": newId,
               "title": req.body.title,
               "description": req.body.description,
               "date": req.body.date};
@@ -66,7 +62,7 @@ app.post('/events', (req, res) => {
 })
 
 app.put('/events/:id', (req, res) => {
- let id = parseInt(req.params.id);
+ const id = parseInt(req.params.id);
 
  //find the event by id
  let event = findEventById(id);
@@ -99,7 +95,7 @@ app.put('/events/:id', (req, res) => {
 })
 
 app.delete('/events/:id', (req, res) => {
-  let id = parseInt(req.params.id);
+  const id = parseInt(req.params.id);
 
   //find the event by id
   let event = findEventById(id);
