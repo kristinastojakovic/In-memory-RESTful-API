@@ -108,7 +108,8 @@ app.delete('/events/:id', (req, res) => {
 
   let index = array.indexOf(event);
   array.splice(index, 1);
-  res.send(array);
+  
+  res.send(event);
 })
 
 app.listen(3000, function () {

@@ -73,7 +73,7 @@ describe('Events', () => {
     describe('/PUT event', () => {
       it('it should change the title of event 1', (done) => {
         let my_event = {
-          "title" : "Marthon_of_the_century",
+          "title" : "Marathon_of_the_century",
           "description" : "This was a run",
           "date" : "12.06.2017"
         }
@@ -88,6 +88,7 @@ describe('Events', () => {
             res.body.should.have.property('title');
             res.body.should.have.property('description');
             res.body.should.have.property('date');
+			res.body.title.should.equal('Marathon_of_the_century');
             done();
           });
       });
@@ -109,5 +110,22 @@ describe('Events', () => {
       });
     });
 
-
+    describe('/DELETE/:id event', () => {
+      it('it should delete event by the given id', (done) => {
+        chai.request(server)
+          .delete('/events/1')
+          .end((err, res) => {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('object');
+				res.body.should.have.property('id');
+				res.body.should.have.property('title');
+				res.body.should.have.property('description');
+				res.body.should.have.property('date');
+				res.body.id.should.equal(1);
+            done();
+          });
+      });
+    });
+	
 });
