@@ -4,6 +4,7 @@ let server = require('../app.js');
 let should = chai.should();
 
 chai.use(chaiHttp);
+///jjjjjj
 
 
 /*
@@ -28,7 +29,7 @@ describe('/GET events', () => {
 describe('/POST events', () => {
 	it('it should POST an event ', (done) => {
 		let my_event = {
-			"id" : '1', 
+			"id" : '1',
 			"title" : "Marathon_Boston",
 			"description" : "This was a run",
 			"date" : "12.06.2017"
