@@ -85,7 +85,7 @@ app.put('/events/:id', (req, res) => {
  }
  event.description = req.body.description;
 
- if (!req.body.title) {
+ if (!req.body.date) {
    res.statusCode = 404;
    return res.send('You have to insert a date');
  }

@@ -26,8 +26,8 @@ describe('Events', () => {
     		});
       });
     });
-	
-	
+
+
 	describe('/GET/:id events', () => {
       it('it should GET event by the given id', (done) => {
 		chai.request(server)
@@ -41,7 +41,7 @@ describe('Events', () => {
 				res.body.should.have.property('description');
 				res.body.should.have.property('date');
     		  done();
-    		}); 
+    		});
       });
     });
 
@@ -69,5 +69,45 @@ describe('Events', () => {
     			});
     	});
     });
+
+    describe('/PUT event', () => {
+      it('it should change the title of event 1', (done) => {
+        let my_event = {
+          "title" : "Marthon_of_the_century",
+          "description" : "This was a run",
+          "date" : "12.06.2017"
+        }
+        chai.request(server)
+          .put('/events/1')
+          .send(my_event)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.should.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('id');
+            res.body.should.have.property('title');
+            res.body.should.have.property('description');
+            res.body.should.have.property('date');
+            done();
+          });
+      });
+    });
+
+    describe('/PUT event', () => {
+      it('it should give a error, because there is no description', (done) => {
+        let my_event = {
+          "title" : "Mathon",
+          "date" : "12.06.2017"
+        }
+        chai.request(server)
+          .put('/events/1')
+          .send(my_event)
+          .end((err, res) => {
+            res.should.have.status(404);
+            done();
+          });
+      });
+    });
+
 
 });
