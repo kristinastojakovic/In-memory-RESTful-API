@@ -26,6 +26,24 @@ describe('Events', () => {
     		});
       });
     });
+	
+	
+	describe('/GET/:id events', () => {
+      it('it should GET event by the given id', (done) => {
+		chai.request(server)
+    		.get('/events/1')
+    		.end((err, res) => {
+    			res.should.have.status(200);
+    			res.should.be.json;
+				res.body.should.be.a('object');
+				res.body.should.have.property('id');
+				res.body.should.have.property('title');
+				res.body.should.have.property('description');
+				res.body.should.have.property('date');
+    		  done();
+    		}); 
+      });
+    });
 
     describe('/POST events', () => {
     	it('it should POST an event ', (done) => {
