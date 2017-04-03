@@ -17,6 +17,7 @@ app.get('/event', (req, res) => {
   res.send(array[0]);
 });
 
+
 app.get('/events', (req, res) => {
 	res.send(array);
 });
