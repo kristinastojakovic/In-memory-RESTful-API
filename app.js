@@ -85,7 +85,7 @@ app.put('/events/:id', (req, res) => {
  }
  event.description = req.body.description;
 
- if (!req.body.title) {
+ if (!req.body.date) {
    res.statusCode = 404;
    return res.send('You have to insert a date');
  }
@@ -108,7 +108,8 @@ app.delete('/events/:id', (req, res) => {
 
   let index = array.indexOf(event);
   array.splice(index, 1);
-  res.send(array);
+  
+  res.send(event);
 })
 
 app.listen(3000, function () {
