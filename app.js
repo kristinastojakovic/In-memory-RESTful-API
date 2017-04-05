@@ -13,7 +13,7 @@ var url = 'mongodb://localhost:27017/events';
 
 // Use connect method to connect to the server
 MongoClient.connect(url, function(err, db) {
-  
+
   assert.equal(null, err);
   console.log("Connected successfully to server");
 
@@ -22,15 +22,39 @@ MongoClient.connect(url, function(err, db) {
 		res.statusCode = 404;
 		return res.send('You have to insert title, description and date');
 	  }
-	  
+
 	  insertDocuments(db, req, function() {
 		db.close();
 	  });
-	  
+
 	res.send("Success!");
-	  
+
   })
-  
+
+  app.put('/events/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+
+   //checking if event is empty
+/*   if (!req.body.title) {
+     res.statusCode = 404;
+     return res.send('You have to insert a name');
+   }
+   if (!req.body.description) {
+     res.statusCode = 404;
+     return res.send('You have to insert a description');
+   }
+   if (!req.body.date) {
+     res.statusCode = 404;
+     return res.send('You have to insert a date');
+   } */
+
+   updateDocument(db, function() {
+     db.close();
+   });
+
+   res.send('Suceesfully updated event');
+  })
+
 });
 
 let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a run",
@@ -84,38 +108,18 @@ var insertDocuments = function(db, req, callback) {
   });
 }
 
-app.put('/events/:id', (req, res) => {
- const id = parseInt(req.params.id);
-
- //find the event by id
- let event = findEventById(id);
-
- //checking if event is empty
- if (!event) {
-    res.statusCode = 404;
-    return res.send('Could not find a event by this id');
- }
-
- if (!req.body.title) {
-   res.statusCode = 404;
-   return res.send('You have to insert a name');
- }
- event.title = req.body.title;
-
- if (!req.body.description) {
-   res.statusCode = 404;
-   return res.send('You have to insert a description');
- }
- event.description = req.body.description;
-
- if (!req.body.date) {
-   res.statusCode = 404;
-   return res.send('You have to insert a date');
- }
- event.date = req.body.date;
-
- res.send(event);
-})
+var updateDocument = function(db, callback) {
+  // Get the documents collection
+  var collection = db.collection('documents');
+  // Update document where a is 2, set b equal to 1
+  collection.updateOne({ "title" : "updatedEvent", "description" : "Thiss a run", "date" : "12.06.2017" }
+    , { $set: { "title" : "update", "description" : "updated run", "date" : "12.06.2017" } }, function(err, result) {
+    assert.equal(err, null);
+    assert.equal(1, result.result.n);
+    console.log("Updated the document with the field a equal to 2");
+    callback(result);
+  });
+}
 
 app.delete('/events/:id', (req, res) => {
   const id = parseInt(req.params.id);
@@ -131,7 +135,7 @@ app.delete('/events/:id', (req, res) => {
 
   let index = array.indexOf(event);
   array.splice(index, 1);
-  
+
   res.send(event);
 })
 
