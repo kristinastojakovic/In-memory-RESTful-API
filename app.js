@@ -1,15 +1,16 @@
-const 	express = require('express');
+const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var MongoClient = require('mongodb').MongoClient,
-	assert = require('assert');
+const MongoClient = require('mongodb').MongoClient,
+	assert = require('assert'),
+	ObjectId = require('mongodb').ObjectID;
 
 // Connection URL
-var url = 'mongodb://localhost:27017/events';
+const url = 'mongodb://localhost:27017/events';
 
 // Use connect method to connect to the server
 MongoClient.connect(url, function(err, db) {
@@ -32,10 +33,10 @@ MongoClient.connect(url, function(err, db) {
   })
 
   app.put('/events/:id', (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
    //checking if event is empty
-/*   if (!req.body.title) {
+   if (!req.body.title) {
      res.statusCode = 404;
      return res.send('You have to insert a name');
    }
@@ -46,9 +47,9 @@ MongoClient.connect(url, function(err, db) {
    if (!req.body.date) {
      res.statusCode = 404;
      return res.send('You have to insert a date');
-   } */
+   }
 
-   updateDocument(db, function() {
+   updateDocument(db, id, req, function() {
      db.close();
    });
 
@@ -91,9 +92,9 @@ app.get('/events/:id', (req, res) => {
   res.send(event);
 })
 
-var insertDocuments = function(db, req, callback) {
+let insertDocuments = function(db, req, callback) {
   // Get the documents collection
-  var collection = db.collection('documents');
+  let collection = db.collection('documents');
   // Insert some documents
   collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
     assert.equal(err, null);
@@ -104,12 +105,12 @@ var insertDocuments = function(db, req, callback) {
   });
 }
 
-var updateDocument = function(db, callback) {
+let updateDocument = function(db, id, req, callback) {
   // Get the documents collection
-  var collection = db.collection('documents');
+  let collection = db.collection('documents');
   // Update document where a is 2, set b equal to 1
-  collection.updateOne({ "title" : "updatedEvent", "description" : "Thiss a run", "date" : "12.06.2017" }
-    , { $set: { "title" : "update", "description" : "updated run", "date" : "12.06.2017" } }, function(err, result) {
+  collection.updateOne({ "_id" : ObjectId(id) }
+    , { $set: { "title": req.body.title, "description": req.body.description, "date": req.body.date } }, function(err, result) {
     assert.equal(err, null);
     assert.equal(1, result.result.n);
     console.log("Updated the document with the field a equal to 2");
