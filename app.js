@@ -53,9 +53,27 @@ MongoClient.connect(url, function(err, db) {
      db.close();
    });
 
-   res.send('Suceesfully updated event');
+   
+  res.send('Succesfully updated event');
   })
 
+  //TODO
+  app.delete('/events/:id', (req, res) => {
+  const id = req.params.id;
+
+  //checking if event is empty
+  if (id === undefined) {
+	res.statusCode = 404;
+	return res.send('Could not find a event by this id');
+  }
+
+   removeDocument(db, id, function() {
+     db.close();
+   });
+   
+   res.send('Succesfully deleted the event!');
+  })
+  
 });
 
 let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a run",
@@ -92,9 +110,9 @@ app.get('/events/:id', (req, res) => {
   res.send(event);
 })
 
-let insertDocuments = function(db, req, callback) {
+const insertDocuments = function(db, req, callback) {
   // Get the documents collection
-  let collection = db.collection('documents');
+  const collection = db.collection('documents');
   // Insert some documents
   collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
     assert.equal(err, null);
@@ -105,9 +123,9 @@ let insertDocuments = function(db, req, callback) {
   });
 }
 
-let updateDocument = function(db, id, req, callback) {
+const updateDocument = function(db, id, req, callback) {
   // Get the documents collection
-  let collection = db.collection('documents');
+  const collection = db.collection('documents');
   // Update document where a is 2, set b equal to 1
   collection.updateOne({ "_id" : ObjectId(id) }
     , { $set: { "title": req.body.title, "description": req.body.description, "date": req.body.date } }, function(err, result) {
@@ -118,23 +136,17 @@ let updateDocument = function(db, id, req, callback) {
   });
 }
 
-app.delete('/events/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-
-  //find the event by id
-  let event = findEventById(id);
-
-  //checking if event is empty
-  if (!event) {
-	res.statusCode = 404;
-	return res.send('Could not find a event by this id');
-  }
-
-  let index = array.indexOf(event);
-  array.splice(index, 1);
-
-  res.send(event);
-})
+const removeDocument = function(db, id, res, callback) {
+  // Get the documents collection
+  const collection = db.collection('documents');
+  // Delete document where a is 3
+  collection.deleteOne({ "_id" : ObjectId(id)}, function(err, result) {
+	assert.equal(err, null);
+    assert.equal(1, result.result.n);
+    console.log("Removed the event");
+    callback(result);
+  });
+}
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
