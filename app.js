@@ -13,10 +13,6 @@ let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a ru
 	  {"id": 3, "title": "Film_Festival", "description": "This was educational",
       "date": "30.08.2017"}];
 
-app.get('/event', (req, res) => {
-  res.send(array[0]);
-});
-
 app.get('/events', (req, res) => {
 	res.send(array);
 });
