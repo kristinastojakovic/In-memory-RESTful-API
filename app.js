@@ -5,11 +5,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var MongoClient = require('mongodb').MongoClient,
+const MongoClient = require('mongodb').MongoClient,
 	assert = require('assert');
 
 // Connection URL
-var url = 'mongodb://localhost:27017/events';
+const url = 'mongodb://localhost:27017/events';
 
 // Use connect method to connect to the server
 MongoClient.connect(url, function(err, db) {
@@ -91,9 +91,9 @@ app.get('/events/:id', (req, res) => {
   res.send(event);
 })
 
-var insertDocuments = function(db, req, callback) {
+let insertDocuments = function(db, req, callback) {
   // Get the documents collection
-  var collection = db.collection('documents');
+  let collection = db.collection('documents');
   // Insert some documents
   collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
     assert.equal(err, null);
@@ -104,9 +104,9 @@ var insertDocuments = function(db, req, callback) {
   });
 }
 
-var updateDocument = function(db, callback) {
+let updateDocument = function(db, callback) {
   // Get the documents collection
-  var collection = db.collection('documents');
+  let collection = db.collection('documents');
   // Update document where a is 2, set b equal to 1
   collection.updateOne({ "title" : "updatedEvent", "description" : "Thiss a run", "date" : "12.06.2017" }
     , { $set: { "title" : "update", "description" : "updated run", "date" : "12.06.2017" } }, function(err, result) {
