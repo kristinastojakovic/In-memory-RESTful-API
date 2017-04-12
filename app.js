@@ -12,6 +12,40 @@ const MongoClient = require('mongodb').MongoClient,
 // Connection URL
 const url = 'mongodb://localhost:27017/events';
 
+// mongoose
+const mongoose = require('mongoose');
+mongoose.connect(url);
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+  
+  const eventSchema = mongoose.Schema({
+	title: String,
+	description: String,
+    date: String
+  }, {collection: "documents"});
+  
+  var Event = mongoose.model('Event', eventSchema);
+  
+    app.post('/events', (req, res) => {
+	  if (!req.body.title || !req.body.description || !req.body.date) {
+		res.statusCode = 404;
+		return res.send('You have to insert title, description and date');
+	  }
+
+	  insertDocuments(db, req, function() {
+		db.close();
+	  });
+
+	res.send("Success!");
+
+  })
+  
+});
+
+/*
 // Use connect method to connect to the server
 MongoClient.connect(url, function(err, db) {
 
@@ -75,6 +109,7 @@ MongoClient.connect(url, function(err, db) {
   })
   
 });
+*/
 
 let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a run",
       "date": "12.06.2017"},
@@ -122,6 +157,21 @@ const insertDocuments = function(db, req, callback) {
     callback(result);
   });
 }
+
+/*
+const insertDocuments = function(db, req, callback) {
+  // Get the documents collection
+  const collection = db.collection('documents');
+  // Insert some documents
+  collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
+    assert.equal(err, null);
+    assert.equal(1, result.result.n);
+    assert.equal(1, result.ops.length);
+    console.log("Inserted 1 event into the collection");
+    callback(result);
+  });
+}
+*/
 
 const updateDocument = function(db, id, req, callback) {
   // Get the documents collection
