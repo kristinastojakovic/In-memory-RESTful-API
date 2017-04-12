@@ -20,30 +20,38 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
-  
+
   const eventSchema = mongoose.Schema({
 	title: String,
 	description: String,
     date: String
   }, {collection: "documents"});
-  
+
   var Event = mongoose.model('Event', eventSchema);
-  
-    app.post('/events', (req, res) => {
-	  if (!req.body.title || !req.body.description || !req.body.date) {
-		res.statusCode = 404;
-		return res.send('You have to insert title, description and date');
-	  }
 
-	  insertDocuments(db, req, function() {
-		db.close();
-	  });
+  app.post('/events', insertDocuments);
 
-	res.send("Success!");
-
-  })
-  
 });
+
+const insertDocuments = function(req, res, callback) {
+	if (!req.body.title || !req.body.description || !req.body.date) {
+	res.statusCode = 404;
+	return res.send('You have to insert title, description and date');
+	}
+
+  // Get the documents collection
+  const collection = db.collection('documents');
+  // Insert some documents
+  collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
+    assert.equal(err, null);
+    assert.equal(1, result.result.n);
+    assert.equal(1, result.ops.length);
+    console.log("Inserted 1 event into the collection");
+    callback(result);
+		res.send(result);
+		//db.close();
+  });
+}
 
 /*
 // Use connect method to connect to the server
@@ -87,7 +95,7 @@ MongoClient.connect(url, function(err, db) {
      db.close();
    });
 
-   
+
   res.send('Succesfully updated event');
   })
 
@@ -104,10 +112,10 @@ MongoClient.connect(url, function(err, db) {
    removeDocument(db, id, function() {
      db.close();
    });
-   
+
    res.send('Succesfully deleted the event!');
   })
-  
+
 });
 */
 
@@ -145,18 +153,7 @@ app.get('/events/:id', (req, res) => {
   res.send(event);
 })
 
-const insertDocuments = function(db, req, callback) {
-  // Get the documents collection
-  const collection = db.collection('documents');
-  // Insert some documents
-  collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
-    assert.equal(err, null);
-    assert.equal(1, result.result.n);
-    assert.equal(1, result.ops.length);
-    console.log("Inserted 1 event into the collection");
-    callback(result);
-  });
-}
+
 
 /*
 const insertDocuments = function(db, req, callback) {
