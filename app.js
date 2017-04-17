@@ -32,7 +32,8 @@ db.once('open', function() {
   // we're connected!
 
   app.post('/events', insertEvent);
-	app.delete('/events/:id', removeEvent);
+  app.delete('/events/:id', removeEvent);
+  app.put('/events/:id', updateEvent);
 
 });
 
@@ -63,12 +64,43 @@ const removeEvent = function(req, res, callback) {
 	Event.remove({ _id : ObjectId(id)}, function (err) {
 		if(err) {
 			res.statusCode = 404;
-			console.log('Could not add event')
-			res.send('Could not find a event by this id');
+			console.log('Could not remove event.')
+			res.send('Could not find a event by this id.');
 		}
 		else {
 			res.statusCode = 202;
 			res.send('Succesfully deleted the event!');
+		}
+	});
+}
+
+const updateEvent = function(req, res, callback) {
+	const id = req.params.id;
+
+    //checking if event is empty
+    if (!req.body.title) {
+		res.statusCode = 404;
+		return res.send('You have to insert a name');
+	}
+	if (!req.body.description) {
+		res.statusCode = 404;
+		return res.send('You have to insert a description');
+	}
+	if (!req.body.date) {
+		res.statusCode = 404;
+		return res.send('You have to insert a date');
+	}
+	
+	Event.update({ _id : ObjectId(id)}, {title: req.body.title, description: req.body.description, date: req.body.date}, function (err, rawResponse) {
+		console.log(rawResponse);
+		if(err || rawResponse.nModified === 0) {
+			res.statusCode = 404;
+			console.log('Could not update event.')
+			res.send('Could not find a event by this id.');
+		}
+		else {
+			res.statusCode = 202;
+			res.send('Succesfully updated the event!');
 		}
 	});
 }
@@ -92,31 +124,6 @@ MongoClient.connect(url, function(err, db) {
 
 	res.send("Success!");
 
-  })
-
-  app.put('/events/:id', (req, res) => {
-    const id = req.params.id;
-
-   //checking if event is empty
-   if (!req.body.title) {
-     res.statusCode = 404;
-     return res.send('You have to insert a name');
-   }
-   if (!req.body.description) {
-     res.statusCode = 404;
-     return res.send('You have to insert a description');
-   }
-   if (!req.body.date) {
-     res.statusCode = 404;
-     return res.send('You have to insert a date');
-   }
-
-   updateDocument(db, id, req, function() {
-     db.close();
-   });
-
-
-  res.send('Succesfully updated event');
   })
 
   //TODO
