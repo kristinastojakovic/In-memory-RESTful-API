@@ -16,18 +16,20 @@ const url = 'mongodb://localhost:27017/events';
 const mongoose = require('mongoose');
 mongoose.connect(url);
 
+const eventSchema = mongoose.Schema({
+	title: String,
+	description: String,
+	date: String
+}, {collection: "documents"});
+
+var Event = mongoose.model('Event', eventSchema);
+
+mongoose.Promise = require('bluebird');
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
-
-  const eventSchema = mongoose.Schema({
-	title: String,
-	description: String,
-    date: String
-  }, {collection: "documents"});
-
-  var Event = mongoose.model('Event', eventSchema);
 
   app.post('/events', insertDocuments);
 
@@ -41,16 +43,15 @@ const insertDocuments = function(req, res, callback) {
 
   // Get the documents collection
   const collection = db.collection('documents');
-  // Insert some documents
-  collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
-    assert.equal(err, null);
-    assert.equal(1, result.result.n);
-    assert.equal(1, result.ops.length);
-    console.log("Inserted 1 event into the collection");
-    callback(result);
-		res.send(result);
-		//db.close();
+
+  var newEvent = new Event({title: req.body.title, description: req.body.description, date: req.body.date});
+  
+  newEvent.save(function (err, newEvent) {
+	if (err) return console.error(err);
   });
+  
+  res.statusCode = 201;
+  res.send(newEvent);
 }
 
 /*
