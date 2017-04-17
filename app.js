@@ -31,27 +31,46 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
 
-  app.post('/events', insertDocuments);
+  app.post('/events', insertEvent);
+	app.delete('/events/:id', removeEvent);
 
 });
 
-const insertDocuments = function(req, res, callback) {
+const insertEvent = function(req, res, callback) {
 	if (!req.body.title || !req.body.description || !req.body.date) {
-	res.statusCode = 404;
-	return res.send('You have to insert title, description and date');
+		res.statusCode = 404;
+		return res.send('You have to insert title, description and date');
 	}
 
-  // Get the documents collection
-  const collection = db.collection('documents');
-
   var newEvent = new Event({title: req.body.title, description: req.body.description, date: req.body.date});
-  
+
   newEvent.save(function (err, newEvent) {
-	if (err) return console.error(err);
+		if (err) {
+			res.statusCode = 404;
+			res.send('could not add event');
+			return console.error(err);
+		}
+		else {
+			res.statusCode = 201;
+			res.send(newEvent);
+		}
   });
-  
-  res.statusCode = 201;
-  res.send(newEvent);
+}
+
+const removeEvent = function(req, res, callback) {
+	const id = req.params.id;
+
+	Event.remove({ _id : ObjectId(id)}, function (err) {
+		if(err) {
+			res.statusCode = 404;
+			console.log('Could not add event')
+			res.send('Could not find a event by this id');
+		}
+		else {
+			res.statusCode = 202;
+			res.send('Succesfully deleted the event!');
+		}
+	});
 }
 
 /*
@@ -118,7 +137,7 @@ MongoClient.connect(url, function(err, db) {
   })
 
 });
-*/
+
 
 let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a run",
       "date": "12.06.2017"},
@@ -156,7 +175,7 @@ app.get('/events/:id', (req, res) => {
 
 
 
-/*
+
 const insertDocuments = function(db, req, callback) {
   // Get the documents collection
   const collection = db.collection('documents');
@@ -169,7 +188,7 @@ const insertDocuments = function(db, req, callback) {
     callback(result);
   });
 }
-*/
+
 
 const updateDocument = function(db, id, req, callback) {
   // Get the documents collection
@@ -195,6 +214,8 @@ const removeDocument = function(db, id, res, callback) {
     callback(result);
   });
 }
+
+*/
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
