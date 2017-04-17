@@ -34,6 +34,8 @@ db.once('open', function() {
   app.post('/events', insertEvent);
   app.delete('/events/:id', removeEvent);
   app.put('/events/:id', updateEvent);
+	app.get('/events/:id', findEvent);
+	//app.get('/events', findAllEvents);
 
 });
 
@@ -90,7 +92,7 @@ const updateEvent = function(req, res, callback) {
 		res.statusCode = 404;
 		return res.send('You have to insert a date');
 	}
-	
+
 	Event.update({ _id : ObjectId(id)}, {title: req.body.title, description: req.body.description, date: req.body.date}, function (err, rawResponse) {
 		console.log(rawResponse);
 		if(err || rawResponse.nModified === 0) {
@@ -105,124 +107,26 @@ const updateEvent = function(req, res, callback) {
 	});
 }
 
+const findEvent = function(req, res, callback) {
+	const id = parseInt(req.params.id);
+
+	Event.find({ _id : ObjectId(id)}, function (err, event) {
+		console.log(event);
+		if(err) {
+			res.statusCode = 404;
+			res.send('Could not find a event by this id');
+		}
+		else {
+			res.send(event);
+		}
+	});
+}
+
 /*
-// Use connect method to connect to the server
-MongoClient.connect(url, function(err, db) {
+const findAllEvents() {
+	Event.find();
+}  */
 
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
-
-  app.post('/events', (req, res) => {
-	  if (!req.body.title || !req.body.description || !req.body.date) {
-		res.statusCode = 404;
-		return res.send('You have to insert title, description and date');
-	  }
-
-	  insertDocuments(db, req, function() {
-		db.close();
-	  });
-
-	res.send("Success!");
-
-  })
-
-  //TODO
-  app.delete('/events/:id', (req, res) => {
-  const id = req.params.id;
-
-  //checking if event is empty
-  if (id === undefined) {
-	res.statusCode = 404;
-	return res.send('Could not find a event by this id');
-  }
-
-   removeDocument(db, id, function() {
-     db.close();
-   });
-
-   res.send('Succesfully deleted the event!');
-  })
-
-});
-
-
-let array = [{"id": 1, "title": "Marathon_Boston", "description": "This was a run",
-      "date": "12.06.2017"},
-	  {"id": 2, "title": "Music_Festival", "description": "This was fun",
-      "date": "01.04.2017"},
-	  {"id": 3, "title": "Film_Festival", "description": "This was educational",
-      "date": "30.08.2017"}];
-
-app.get('/events', (req, res) => {
-	res.send(array);
-});
-
-function findEventById(id) {
-  for(let i = 0; i < array.length; i++) {
-    if(array[i].id === id){
-      return array[i];
-    }
-  }
-}
-
-app.get('/events/:id', (req, res) => {
-  //get the id from the route
-  const id = parseInt(req.params.id);
-
-  //find the event by id
-  let event = findEventById(id);
-
-  //checking if event is empty
-  if(!event) {
-    res.statusCode = 404;
-    return res.send('Could not find a event by this id');
-  }
-  res.send(event);
-})
-
-
-
-
-const insertDocuments = function(db, req, callback) {
-  // Get the documents collection
-  const collection = db.collection('documents');
-  // Insert some documents
-  collection.insertOne({"title": req.body.title, "description": req.body.description, "date": req.body.date}, function(err, result) {
-    assert.equal(err, null);
-    assert.equal(1, result.result.n);
-    assert.equal(1, result.ops.length);
-    console.log("Inserted 1 event into the collection");
-    callback(result);
-  });
-}
-
-
-const updateDocument = function(db, id, req, callback) {
-  // Get the documents collection
-  const collection = db.collection('documents');
-  // Update document where a is 2, set b equal to 1
-  collection.updateOne({ "_id" : ObjectId(id) }
-    , { $set: { "title": req.body.title, "description": req.body.description, "date": req.body.date } }, function(err, result) {
-    assert.equal(err, null);
-    assert.equal(1, result.result.n);
-    console.log("Updated the document with the field a equal to 2");
-    callback(result);
-  });
-}
-
-const removeDocument = function(db, id, res, callback) {
-  // Get the documents collection
-  const collection = db.collection('documents');
-  // Delete document where a is 3
-  collection.deleteOne({ "_id" : ObjectId(id)}, function(err, result) {
-	assert.equal(err, null);
-    assert.equal(1, result.result.n);
-    console.log("Removed the event");
-    callback(result);
-  });
-}
-
-*/
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
