@@ -108,9 +108,9 @@ const updateEvent = function(req, res, callback) {
 }
 
 const findEvent = function(req, res, callback) {
-	const id = parseInt(req.params.id);
+	const id = req.params.id;
 
-	Event.find( function (err, event) {
+	Event.findOne({ _id : ObjectId(id)} ,function (err, event) {
 		console.log(event);
 		if(err) {
 			res.statusCode = 404;
