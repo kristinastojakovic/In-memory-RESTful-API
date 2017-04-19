@@ -35,7 +35,7 @@ db.once('open', function() {
   app.delete('/events/:id', removeEvent);
   app.put('/events/:id', updateEvent);
 	app.get('/events/:id', findEvent);
-	//app.get('/events', findAllEvents);
+	app.get('/events', findAllEvents);
 
 });
 
@@ -110,7 +110,7 @@ const updateEvent = function(req, res, callback) {
 const findEvent = function(req, res, callback) {
 	const id = parseInt(req.params.id);
 
-	Event.find({ _id : ObjectId(id)}, function (err, event) {
+	Event.find( function (err, event) {
 		console.log(event);
 		if(err) {
 			res.statusCode = 404;
@@ -122,10 +122,18 @@ const findEvent = function(req, res, callback) {
 	});
 }
 
-/*
-const findAllEvents() {
-	Event.find();
-}  */
+
+const findAllEvents = function(req, res, callback) {
+	Event.find(function (err, events) {
+		if(err) {
+			res.statusCode = 404;
+			res.send('Could not find a events');
+		}
+		else {
+			res.send(events);
+		}
+	});
+}
 
 
 app.listen(3000, function () {
