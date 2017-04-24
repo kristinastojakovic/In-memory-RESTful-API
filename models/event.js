@@ -1,30 +1,3 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const events = require('./controllers/events.js');
-
-const MongoClient = require('mongodb').MongoClient,
-	assert = require('assert'),
-	ObjectId = require('mongodb').ObjectID;
-
-const model = require('./models/event.js');
-model.db.on('error', console.error.bind(console, 'connection error:'));
-model.db.once('open', function() {
-  // we're connected!
-
-  app.use('/', events);
-  
-  /*
-  app.post('/events', model.insertEvent);
-  app.delete('/events/:id', model.removeEvent);
-  app.put('/events/:id', model.updateEvent);
-  app.get('/events/:id', model.findEvent);
-  app.get('/events', model.findAllEvents);
-  */
-  
-});
-
-/*
 // Connection URL
 const url = 'mongodb://localhost:27017/events';
 
@@ -32,52 +5,53 @@ const url = 'mongodb://localhost:27017/events';
 const mongoose = require('mongoose');
 mongoose.connect(url);
 
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const MongoClient = require('mongodb').MongoClient,
+	assert = require('assert'),
+	ObjectId = require('mongodb').ObjectID;
+
 const eventSchema = mongoose.Schema({
 	title: String,
 	description: String,
 	date: String
 }, {collection: "documents"});
 
-var Event = mongoose.model('Event', eventSchema);
+Event = mongoose.model('Event', eventSchema);
 
 mongoose.Promise = require('bluebird');
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  // we're connected!
+module.exports.db = mongoose.connection;
 
-  app.post('/events', insertEvent);
-  app.delete('/events/:id', removeEvent);
-  app.put('/events/:id', updateEvent);
-  app.get('/events/:id', findEvent);
-  app.get('/events', findAllEvents);
 
-});*/
+module.exports.insertEvent = function(req, res, callback) {
 
-/*
-const insertEvent = function(req, res, callback) {
 	if (!req.body.title || !req.body.description || !req.body.date) {
-		res.statusCode = 404;
-		return res.send('You have to insert title, description and date');
-	}
+	res.statusCode = 404;
+	return res.send('You have to insert title, description and date');
+  }
+  
+	var newEvent = new Event({title: req.body.title, description: req.body.description, date: req.body.date});
 
-  var newEvent = new Event({title: req.body.title, description: req.body.description, date: req.body.date});
-
-  newEvent.save(function (err, newEvent) {
-		if (err) {
-			res.statusCode = 404;
-			res.send('could not add event');
-			return console.error(err);
-		}
-		else {
+	newEvent.save(function (err, newEvent) {
+		console.log("err: " + err);
+		if (err === null) {
 			res.statusCode = 201;
 			res.send(newEvent);
+			return console.log(err);
 		}
-  });
+		else {
+			res.statusCode = 404;
+			res.send('Could not add event.');
+		}
+	});
 }
 
-const removeEvent = function(req, res, callback) {
+module.exports.removeEvent = function(req, res, callback) {
 	const id = req.params.id;
 
 	Event.remove({ _id : ObjectId(id)}, function (err) {
@@ -93,7 +67,7 @@ const removeEvent = function(req, res, callback) {
 	});
 }
 
-const updateEvent = function(req, res, callback) {
+module.exports.updateEvent = function(req, res, callback) {
 	const id = req.params.id;
 
     //checking if event is empty
@@ -124,7 +98,7 @@ const updateEvent = function(req, res, callback) {
 	});
 }
 
-const findEvent = function(req, res, callback) {
+module.exports.findEvent = function(req, res, callback) {
 	const id = req.params.id;
 
 	Event.findOne({ _id : ObjectId(id)} ,function (err, event) {
@@ -140,7 +114,7 @@ const findEvent = function(req, res, callback) {
 }
 
 
-const findAllEvents = function(req, res, callback) {
+module.exports.findAllEvents = function(req, res, callback) {
 	Event.find(function (err, events) {
 		if(err) {
 			res.statusCode = 404;
@@ -150,11 +124,4 @@ const findAllEvents = function(req, res, callback) {
 			res.send(events);
 		}
 	});
-}*/
-
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
-
-module.exports = app;
+}
