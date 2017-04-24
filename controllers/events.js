@@ -6,11 +6,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const model = require('../models/event.js');
-  
-app.post('/events', model.insertEvent);
-app.delete('/events/:id', model.removeEvent);
-app.put('/events/:id', model.updateEvent);
-app.get('/events/:id', model.findEvent);
-app.get('/events', model.findAllEvents);
+
+app.post('/', model.insertEvent);
+app.delete('/:id', model.removeEvent);
+app.put('/:id', model.updateEvent);
+app.get('/:id', model.findEvent);
+app.get('/', model.findAllEvents);
 
 module.exports = app
