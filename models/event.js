@@ -38,7 +38,6 @@ module.exports.insertEvent = function(req, res, callback) {
 	var newEvent = new Event({title: req.body.title, description: req.body.description, date: req.body.date});
 
 	newEvent.save(function (err, newEvent) {
-		console.log("err: " + err);
 		if (err === null) {
 			res.statusCode = 201;
 			res.send(newEvent);
@@ -67,6 +66,19 @@ module.exports.removeEvent = function(req, res, callback) {
 	});
 }
 
+module.exports.removeAllEvents = function(callback) {
+
+	Event.remove({}, function (err) {
+		if(err) {
+			console.log('Could not remove event.');
+		}
+		else {
+			console.log('Deleted events from database');
+		}
+
+	});
+}
+
 module.exports.updateEvent = function(req, res, callback) {
 	const id = req.params.id;
 
@@ -85,7 +97,6 @@ module.exports.updateEvent = function(req, res, callback) {
 	}
 
 	Event.update({ _id : ObjectId(id)}, {title: req.body.title, description: req.body.description, date: req.body.date}, function (err, rawResponse) {
-		console.log(rawResponse);
 		if(err || rawResponse.nModified === 0) {
 			res.statusCode = 404;
 			console.log('Could not update event.')
@@ -102,12 +113,12 @@ module.exports.findEventById = function(req, res, callback) {
 	const id = req.params.id;
 
 	Event.findOne({ _id : ObjectId(id)} ,function (err, event) {
-		console.log(event);
-		if(err) {
+		if(err || event === null) {
 			res.statusCode = 404;
 			res.send('Could not find a event by this id');
 		}
 		else {
+			res.statusCode = 201;
 			res.send(event);
 		}
 	});
@@ -116,13 +127,13 @@ module.exports.findEventById = function(req, res, callback) {
 module.exports.findEventByTitle = function(req, res, callback) {
 	const title = req.params.title;
 
-	Event.find({ title: title } ,function (err, event) {
-		console.log(event);
-		if(err) {
+	Event.findOne({ title: title } ,function (err, event) {
+		if(err || event === null) {
 			res.statusCode = 404;
 			res.send('Could not find a event by this title');
 		}
 		else {
+			res.statusCode = 201;
 			res.send(event);
 		}
 	});
@@ -136,6 +147,7 @@ module.exports.findAllEvents = function(req, res, callback) {
 			res.send('Could not find a events');
 		}
 		else {
+			res.statusCode = 200;
 			res.send(events);
 		}
 	});
