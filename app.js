@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const events = require('./controllers/events.js');
 
 const MongoClient = require('mongodb').MongoClient,
