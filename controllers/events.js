@@ -10,7 +10,8 @@ const model = require('../models/event.js');
 app.post('/', model.insertEvent);
 app.delete('/:id', model.removeEvent);
 app.put('/:id', model.updateEvent);
-app.get('/:id', model.findEvent);
+app.get('/Title/:title', model.findEventByTitle);
+app.get('/:id', model.findEventById);
 app.get('/', model.findAllEvents);
 
 module.exports = app

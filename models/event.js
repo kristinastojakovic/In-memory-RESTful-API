@@ -34,7 +34,7 @@ module.exports.insertEvent = function(req, res, callback) {
 	res.statusCode = 404;
 	return res.send('You have to insert title, description and date');
   }
-  
+
 	var newEvent = new Event({title: req.body.title, description: req.body.description, date: req.body.date});
 
 	newEvent.save(function (err, newEvent) {
@@ -98,7 +98,7 @@ module.exports.updateEvent = function(req, res, callback) {
 	});
 }
 
-module.exports.findEvent = function(req, res, callback) {
+module.exports.findEventById = function(req, res, callback) {
 	const id = req.params.id;
 
 	Event.findOne({ _id : ObjectId(id)} ,function (err, event) {
@@ -106,6 +106,21 @@ module.exports.findEvent = function(req, res, callback) {
 		if(err) {
 			res.statusCode = 404;
 			res.send('Could not find a event by this id');
+		}
+		else {
+			res.send(event);
+		}
+	});
+}
+
+module.exports.findEventByTitle = function(req, res, callback) {
+	const title = req.params.title;
+
+	Event.find({ title: title } ,function (err, event) {
+		console.log(event);
+		if(err) {
+			res.statusCode = 404;
+			res.send('Could not find a event by this title');
 		}
 		else {
 			res.send(event);
