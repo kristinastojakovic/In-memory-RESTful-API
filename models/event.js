@@ -1,10 +1,3 @@
-// Connection URL
-const url = 'mongodb://localhost:27017/events';
-
-// mongoose
-const mongoose = require('mongoose');
-mongoose.connect(url);
-
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -15,6 +8,12 @@ const MongoClient = require('mongodb').MongoClient,
 	assert = require('assert'),
 	ObjectId = require('mongodb').ObjectID;
 
+const url = 'mongodb://localhost:27017/events';
+const mongoose = require('mongoose');
+mongoose.connect(url);
+mongoose.Promise = require('bluebird');
+module.exports.db = mongoose.connection;
+
 const eventSchema = mongoose.Schema({
 	title: String,
 	description: String,
@@ -22,10 +21,6 @@ const eventSchema = mongoose.Schema({
 }, {collection: "documents"});
 
 Event = mongoose.model('Event', eventSchema);
-
-mongoose.Promise = require('bluebird');
-
-module.exports.db = mongoose.connection;
 
 
 module.exports.insertEvent = function(req, res, callback) {
