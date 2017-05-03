@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const events = require('./controllers/events.js');
+const events = require('./controllers/event.js');
 
 const MongoClient = require('mongodb').MongoClient,
 	assert = require('assert'),
