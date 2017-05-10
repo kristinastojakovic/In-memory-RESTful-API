@@ -12,9 +12,8 @@ chai.use(chaiHttp);
 
 describe('Events', () => {
   before((done) => {
-
-    Events.removeAllEvents({}, (err) => {
-    });
+    //Events.removeAllEvents({}, (err) => {
+    //});
     done();
   });
 

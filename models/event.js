@@ -8,6 +8,6 @@ const eventSchema = mongoose.Schema({
 	title: String,
 	description: String,
 	date: String
-}, {collection: "documents"});
+});
 
 module.exports = eventSchema;
