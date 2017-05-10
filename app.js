@@ -8,7 +8,6 @@ const events = require('./controllers/event.js');
 const url = 'mongodb://localhost:27017/events';
 const mongoose = require('mongoose');
 mongoose.connect(url);
-//mongoose.Promise = require('bluebird');
 db = mongoose.connection;
 
 const model = require('./models/event.js');
@@ -19,7 +18,6 @@ db.once('open', function() {
   app.use('/events', events);
 
 });
-
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')

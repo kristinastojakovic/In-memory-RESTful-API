@@ -127,7 +127,6 @@ const findAllEvents = function(req, res, callback) {
 			res.send('Could not find a events');
 		}
 		else {
-      console.log('We tried to get the events');
 			res.statusCode = 200;
 			res.send(events);
 		}
