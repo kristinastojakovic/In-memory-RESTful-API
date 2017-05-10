@@ -1,10 +1,9 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 const events = require('./controllers/event.js');
-
-const MongoClient = require('mongodb').MongoClient,
-	assert = require('assert'),
-	ObjectId = require('mongodb').ObjectID;
 
 const model = require('./models/event.js');
 model.db.on('error', console.error.bind(console, 'connection error:'));

@@ -1,17 +1,13 @@
 const express = require('express');
-const app = express.Router();
-
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+const router = express.Router();
 
 const model = require('../models/event.js');
 
-app.post('/', model.insertEvent);
-app.delete('/:id', model.removeEvent);
-app.put('/:id', model.updateEvent);
-app.get('/Title/:title', model.findEventByTitle);
-app.get('/:id', model.findEventById);
-app.get('/', model.findAllEvents);
+router.post('/', model.insertEvent);
+router.delete('/:id', model.removeEvent);
+router.put('/:id', model.updateEvent);
+router.get('/Title/:title', model.findEventByTitle);
+router.get('/:id', model.findEventById);
+router.get('/', model.findAllEvents);
 
-module.exports = app
+module.exports = router
