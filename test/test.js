@@ -4,7 +4,7 @@ const chaiHttp = require('chai-http');
 const server = require('../app.js');
 const should = chai.should();
 const mongoose = require("mongoose");
-const Events = require('../models/event.js');
+const Events = require('../controllers/event.js');
 let mockEventId;
 
 chai.use(chaiHttp);
@@ -12,6 +12,7 @@ chai.use(chaiHttp);
 
 describe('Events', () => {
   before((done) => {
+
     Events.removeAllEvents({}, (err) => {
     });
     done();
