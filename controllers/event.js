@@ -47,7 +47,7 @@ const removeEvent = function(req, res, callback) {
 	});
 }
 
-module.exports.removeAllEvents = function(callback) {
+const removeAllEvents = function(callback) {
 
 	Event.remove({}, function (err) {
 		if(err) {
