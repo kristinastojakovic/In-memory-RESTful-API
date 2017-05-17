@@ -134,11 +134,17 @@ const findAllEvents = function(req, res, callback) {
 	});
 }
 
-router.post('/', insertEvent);
-router.delete('/:id', removeEvent);
-router.put('/:id', updateEvent);
-router.get('/Title/:title', findEventByTitle);
-router.get('/:id', findEventById);
-router.get('/', findAllEvents);
+var isAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated()) 
+	return next();
+  res.redirect('/');  
+}
+
+router.post('/', isAuthenticated, insertEvent);
+router.delete('/:id', isAuthenticated, removeEvent);
+router.put('/:id', isAuthenticated, updateEvent);
+router.get('/Title/:title', isAuthenticated, findEventByTitle);
+router.get('/:id', isAuthenticated, findEventById);
+router.get('/', isAuthenticated, findAllEvents);
 
 module.exports = router;

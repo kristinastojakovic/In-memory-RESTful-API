@@ -5,6 +5,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const events = require('./controllers/event.js');
 const users = require('./controllers/user.js');
+const passport = require('passport');
+const session = require('express-session');
+app.use(session({ secret: 'keyboard cat' , resave: true, saveUninitialized: true}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 const url = 'mongodb://localhost:27017/events';
 const mongoose = require('mongoose');
@@ -17,7 +22,7 @@ db.once('open', function() {
   // we're connected!
 
   app.use('/events', events);
-  app.use('/users', users);
+  app.use('/login', users);
 });
 
 app.listen(3000, function () {
