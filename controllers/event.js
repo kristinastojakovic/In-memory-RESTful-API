@@ -121,6 +121,7 @@ const findEventByTitle = function(req, res, callback) {
 }
 
 const findAllEvents = function(req, res, callback) {
+	console.log("hello");
 	Event.find(function (err, events) {
 		if(err) {
 			res.statusCode = 404;
