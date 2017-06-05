@@ -9,14 +9,14 @@ const MongoClient = require('mongodb').MongoClient,
 	assert = require('assert'),
 	ObjectId = require('mongodb').ObjectID;
 
-let node_acl = require('acl');
+//let node_acl = require('acl');
 // Using redis backend 
 //acl = new acl(new acl.redisBackend(redisClient, prefix));
 // Or Using the memory backend 
 //acl = new acl(new acl.memoryBackend());
 // Or Using the mongodb backend
-db = mongoose.connection;
-acl = new node_acl(new node_acl.mongodbBackend(db, "acl_"));
+//db = mongoose.connection;
+//acl = new node_acl(new node_acl.mongodbBackend(db, "acl_"));
 /*var mongodb = require('mongodb');
 mongodb.connect("mongodb://localhost:27017/events", function(error, db) {
   var mongoBackend = new acl.mongodbBackend(db, 'acl_');
@@ -34,21 +34,7 @@ const insertEvent = function(req, res, callback) {
 	newEvent.save(function (err, newEvent) {
 		if (err === null) {
 			res.statusCode = 201;
-			res.send(newEvent);
-			
-			acl.allow('guest', '/events', ['get']);
-			
-			acl.isAllowed('guest', '/events', 'get', function(err, res){
-				if(res){
-				console.log("User joed is allowed to view blogs")
-				}
-			})
-			
-			acl.whatResources( 'guest', function(err, roles){
-				console.log(err, roles);
-            });
-			//acl.addUserRoles(req.user.username, newEvent.title);
-			
+			res.send(newEvent);		
 			return console.log(err);
 		}
 		else {
