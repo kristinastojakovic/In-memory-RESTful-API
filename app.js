@@ -11,9 +11,9 @@ app.use(session({ secret: 'keyboard cat' , resave: true, saveUninitialized: true
 app.use(passport.initialize());
 app.use(passport.session());
 
-const url = 'mongodb://localhost:27017/events';
+//const url = 'mongodb://localhost:27017/events';
 const mongoose = require('mongoose');
-mongoose.connect(url);
+mongoose.connect(process.env.MONGOLAB_URI);
 db = mongoose.connection;
 
 //const model = require('./models/event.js');
@@ -25,7 +25,7 @@ db.once('open', function() {
   app.use('/login', users);
 });
 
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
   console.log('Example app listening on port 3000!')
 })
 
