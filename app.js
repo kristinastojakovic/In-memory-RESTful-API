@@ -13,7 +13,7 @@ app.use(passport.session());
 
 //const url = 'mongodb://localhost:27017/events';
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 db = mongoose.connection;
 
 //const model = require('./models/event.js');
