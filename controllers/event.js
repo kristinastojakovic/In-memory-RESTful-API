@@ -10,9 +10,9 @@ const MongoClient = require('mongodb').MongoClient,
 	ObjectId = require('mongodb').ObjectID;
 
 //let node_acl = require('acl');
-// Using redis backend 
+// Using redis backend
 //acl = new acl(new acl.redisBackend(redisClient, prefix));
-// Or Using the memory backend 
+// Or Using the memory backend
 //acl = new acl(new acl.memoryBackend());
 // Or Using the mongodb backend
 //db = mongoose.connection;
@@ -21,7 +21,7 @@ const MongoClient = require('mongodb').MongoClient,
 mongodb.connect("mongodb://localhost:27017/events", function(error, db) {
   var mongoBackend = new acl.mongodbBackend(db, 'acl_');
 });*/
-	
+
 const insertEvent = function(req, res, callback) {
 
 	if (!req.body.title || !req.body.description || !req.body.date) {
@@ -34,7 +34,7 @@ const insertEvent = function(req, res, callback) {
 	newEvent.save(function (err, newEvent) {
 		if (err === null) {
 			res.statusCode = 201;
-			res.send(newEvent);		
+			res.send(newEvent);
 			return console.log(err);
 		}
 		else {
@@ -148,9 +148,9 @@ const findAllEvents = function(req, res, callback) {
 }
 
 var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) 
+  if (req.isAuthenticated())
 	return next();
-  res.redirect('/');  
+  res.redirect('/');
 }
 
 router.post('/', isAuthenticated, insertEvent);
