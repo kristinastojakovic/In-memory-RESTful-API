@@ -50,6 +50,11 @@ router.get('/',
     res.json(req.user);
 });
 
+router.get('/login',
+  passport.authenticate('basic', { session: true }), function(req, res) {
+    res.json(req.user);
+}); 
+
 passport.use(new BasicStrategy(
   function(userid, password, done) {
     User.findOne({ username: userid }, function (err, user) {

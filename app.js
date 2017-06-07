@@ -22,7 +22,7 @@ db.once('open', function() {
   // we're connected!
 
   app.use('/events', events);
-  app.use('/login', users);
+  app.use('/', users);
 });
 
 app.listen(process.env.PORT || 3000, function () {
