@@ -8,7 +8,7 @@ mongoose.Promise = require('bluebird');
 const MongoClient = require('mongodb').MongoClient,
 	assert = require('assert'),
 	ObjectId = require('mongodb').ObjectID;
-	
+
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
 
@@ -33,7 +33,7 @@ const insertUser = function(req, res, callback) {
 			res.send('Could not add user.');
 		}
 	});
-}*/
+} */
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -45,7 +45,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-router.get('/', 
+router.get('/',
   passport.authenticate('basic', { session: true }), function(req, res) {
     res.json(req.user);
 });
@@ -64,10 +64,8 @@ passport.use(new BasicStrategy(
 verifyPassword = function(user, password){
 	if (user.password == password)
 		return true;
-	else 
+	else
 		return false;
 }
-
-//router.post('/', insertUser);
 
 module.exports = router;

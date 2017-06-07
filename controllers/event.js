@@ -153,11 +153,11 @@ var isAuthenticated = function (req, res, next) {
   res.redirect('/');
 }
 
-router.post('/', /*isAuthenticated,*/ insertEvent);
+router.post('/', isAuthenticated, insertEvent);
 router.delete('/:id', isAuthenticated,  removeEvent);
 router.put('/:id', isAuthenticated, updateEvent);
 router.get('/Title/:title', isAuthenticated, findEventByTitle);
 router.get('/:id', isAuthenticated, findEventById);
-router.get('/', /*isAuthenticated ,*/ findAllEvents);
+router.get('/', isAuthenticated , findAllEvents);
 
 module.exports = router;
